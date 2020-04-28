@@ -1,13 +1,15 @@
 import React from "react";
 import dayjs from "dayjs";
 // MUI
-import Card from "@material-ui/core/Box";
+import Box from "@material-ui/core/Box";
+import CardActionArea from "@material-ui/core/CardActionArea";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+// Weather icons
 import sunny from "../images/sunny.png";
 import cloud from "../images/cloud.png";
 import cloudy from "../images/cloudy.png";
@@ -22,7 +24,7 @@ import sun from "../images/sun.png";
 const useStyles = makeStyles((theme) => ({
   weatherCard: {
     width: theme.spacing(14),
-    height: theme.spacing(18),
+    height: theme.spacing(20),
   },
   weatherIcon: {
     height: theme.spacing(6),
@@ -74,28 +76,30 @@ export default function WeatherCard(props) {
   }
 
   return (
-    <Card className={classes.weatherCard}>
-      <CardHeader
-        classes={{
-          title: classes.grayText,
-        }}
-        title={dayjs(date).format("ddd")}
-        titleTypographyProps={{ variant: "body2" }}
-        style={{ textAlign: "center" }}
-      />
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <CardMedia className={classes.weatherIcon} image={weatherIcon} />
-      </div>
-      <CardContent>
-        <Grid container spacing={2} justify="center">
-          <Grid item>
-            <Typography variant="body2">{maxTemp}°</Typography>
+    <Box className={classes.weatherCard} color="#000000">
+      <CardActionArea>
+        <CardHeader
+          classes={{
+            title: classes.grayText,
+          }}
+          title={dayjs(date).format("ddd")}
+          titleTypographyProps={{ variant: "body2" }}
+          style={{ textAlign: "center" }}
+        />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <CardMedia className={classes.weatherIcon} image={weatherIcon} />
+        </div>
+        <CardContent>
+          <Grid container spacing={2} justify="center">
+            <Grid item>
+              <Typography variant="body2">{maxTemp}°</Typography>
+            </Grid>
+            <Grid item className={classes.grayText}>
+              <Typography variant="body2">{minTemp}°</Typography>
+            </Grid>
           </Grid>
-          <Grid item className={classes.grayText}>
-            <Typography variant="body2">{minTemp}°</Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </CardActionArea>
+    </Box>
   );
 }
