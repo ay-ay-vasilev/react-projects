@@ -3,39 +3,36 @@ import React from "react";
 import WeatherCard from "./components/WeatherCard";
 // MUI
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  weatherCard: {
-    margin: theme.spacing(1),
-    width: theme.spacing(14),
-    height: theme.spacing(18),
-  },
-  weatherIcon: {
-    height: theme.spacing(6),
-    width: theme.spacing(6),
-    alignSelf: "center",
-    justify: "center",
-  },
-  grayText: {
-    color: "#aaaaaa",
-  },
-}));
 
 export default function App() {
-  const classes = useStyles();
+  const today = new Date();
+
+  let dayCards = [];
+
+  for (let i = 0; i < 8; i++) {
+    const newDate = new Date(today.getTime() + i * 86400000);
+
+    dayCards.push({
+      date: newDate,
+      weather: i,
+      maxTemp: 70 + i,
+      minTemp: 70 - i,
+    });
+  }
+
+  let dayCardComponents = dayCards.map((dayCard) => (
+    <WeatherCard
+      key={dayCard.date}
+      date={dayCard.date}
+      weather={dayCard.weather}
+      maxTemp={dayCard.maxTemp}
+      minTemp={dayCard.minTemp}
+    />
+  ));
 
   return (
-    <Grid container spacing={0} justify="center">
-      <Grid item>
-        <WeatherCard classes={classes} />
-      </Grid>
-      <Grid item>
-        <WeatherCard classes={classes} />
-      </Grid>
-      <Grid item>
-        <WeatherCard classes={classes} />
-      </Grid>
+    <Grid container justify="center">
+      {dayCardComponents}
     </Grid>
   );
 }
