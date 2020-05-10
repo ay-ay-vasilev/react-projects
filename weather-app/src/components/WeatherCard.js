@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WeatherCard(props) {
   const classes = useStyles();
-  const { date, weather, maxTemp, minTemp } = props;
+  const { date, weather, maxTemp, minTemp } = props.info;
 
   return (
     <Box className={classes.weatherCard} color="#000000">
