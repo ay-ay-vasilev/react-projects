@@ -1,17 +1,45 @@
 import React from "react";
+import Geocode from "react-geocode";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 
+const state = {
+  location: null,
+};
+
+function getLocation() {
+  navigator.geolocation.getCurrentPosition(function (position) {
+    Geocode.setApiKey("AIzaSyACwlaLUtrw5gW_6gwL_WVOYXyw3CF7ubc");
+    Geocode.setLanguage("en");
+    Geocode.setRegion("kr");
+
+    Geocode.fromLatLng(
+      position.coords.latitude,
+      position.coords.longitude
+    ).then(
+      (response) => {
+        const address = response.results[0].formatted_address;
+        console.log(address);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  });
+}
+
 export default function WeatherDetails(props) {
+  let addr;
+
+  console.log(getLocation());
+
   return (
     <Grid container direction="column" spacing={2}>
       <Grid item container direction="column">
         <Grid item>
-          <Typography variant="h5">
-            Jangjeon-dong, Geumjeong-gu, Busan
-          </Typography>
+          <Typography variant="h5">{addr}</Typography>
         </Grid>
         <Grid item style={{ color: "#aaaaaa" }}>
           <Typography variant="body2">Tuesday</Typography>
