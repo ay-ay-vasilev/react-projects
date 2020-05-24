@@ -1,39 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 
-const state = {
-  location: null,
-};
-
-function getLocation() {
-  navigator.geolocation.getCurrentPosition(function (position) {
-    Geocode.setApiKey("AIzaSyACwlaLUtrw5gW_6gwL_WVOYXyw3CF7ubc");
-    Geocode.setLanguage("en");
-    Geocode.setRegion("kr");
-
-    Geocode.fromLatLng(
-      position.coords.latitude,
-      position.coords.longitude
-    ).then(
-      (response) => {
-        const address = response.results[0].formatted_address;
-        console.log(address);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  });
-}
-
 export default function WeatherDetails(props) {
-  let addr;
+  const [addr, setAddr] = useState("");
 
-  console.log(getLocation());
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+      Geocode.setLanguage("en");
+      Geocode.setRegion("kr");
+
+      Geocode.fromLatLng(
+        position.coords.latitude,
+        position.coords.longitude
+      ).then(
+        (response) => {
+          setAddr(
+            response.results[0].address_components[2].short_name +
+              ", " +
+              response.results[0].address_components[3].short_name
+          );
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    });
+  });
 
   return (
     <Grid container direction="column" spacing={2}>
