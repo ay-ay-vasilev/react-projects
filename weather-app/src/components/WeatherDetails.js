@@ -39,7 +39,9 @@ export default function WeatherDetails(props) {
           <Typography variant="h5">{addr}</Typography>
         </Grid>
         <Grid item style={{ color: "#aaaaaa" }}>
-          <Typography variant="body2">Tuesday</Typography>
+          <Typography variant="body2">
+            {props.date.day} {props.date.time}
+          </Typography>
         </Grid>
         <Grid item style={{ color: "#aaaaaa" }}>
           <Typography variant="body2">Sunny</Typography>

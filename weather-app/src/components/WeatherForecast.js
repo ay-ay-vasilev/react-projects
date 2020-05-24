@@ -1,4 +1,5 @@
 import React from "react";
+import dayjs from "dayjs";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -21,7 +22,7 @@ import sun from "../images/sun.png";
 const useStyles = makeStyles((theme) => ({
   forecast: {
     margin: "auto",
-    width: theme.spacing(14) * 8,
+    width: theme.spacing(14) * 5,
     height: theme.spacing(18) * 4,
     padding: theme.spacing(2),
     spacing: theme.spacing(2),
@@ -32,6 +33,13 @@ export default function WeatherForecast() {
   const classes = useStyles();
 
   const today = new Date();
+  const date = {
+    day: dayjs(today).format("dddd"),
+    time:
+      dayjs(today).format("Z A").slice(1)[0] === "0"
+        ? dayjs(today).format("Z A").slice(2)
+        : dayjs(today).format("Z A").slice(1),
+  };
 
   let dayCards = [];
   let weathers = [
@@ -47,7 +55,7 @@ export default function WeatherForecast() {
     sun,
   ];
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 5; i++) {
     const newDate = new Date(today.getTime() + i * 86400000);
 
     dayCards.push({
@@ -82,7 +90,7 @@ export default function WeatherForecast() {
         </Grid>
 
         <Grid item>
-          <WeatherDetails weather={sun} />
+          <WeatherDetails date={date} weather={sun} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>
