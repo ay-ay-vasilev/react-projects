@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function WeatherForecast() {
   const classes = useStyles();
-
   const today = new Date();
   const date = {
     day: dayjs(today).format("dddd"),

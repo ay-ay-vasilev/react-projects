@@ -24,6 +24,12 @@ export default function WeatherDetails(props) {
               ", " +
               response.results[0].address_components[3].short_name
           );
+
+          fetch(
+            "api.openweathermap.org/data/2.5/forecast?lat=position.coords.latitude&lon=position.coords.longitude&appid=process.env.REACT_APP_OPEN_WEATHER_API_KEY"
+          ).then((response) => {
+            console.log(response.json());
+          });
         },
         (error) => {
           console.error(error);
