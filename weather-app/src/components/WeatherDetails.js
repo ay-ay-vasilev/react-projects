@@ -5,8 +5,25 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CardMedia from "@material-ui/core/CardMedia";
 
+const fetchForecast = async (city) => {
+  try {
+    const api_call = await fetch(
+      "https://api.openweathermap.org/data/2.5/forecast?q=" +
+        city +
+        "&appid=" +
+        process.env.REACT_APP_OPEN_WEATHER_API_KEY
+    );
+    const data = await api_call.json();
+    console.log(city);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default function WeatherDetails(props) {
   const [addr, setAddr] = useState("");
+  const [forecast, setForecast] = useState("");
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -24,12 +41,9 @@ export default function WeatherDetails(props) {
               ", " +
               response.results[0].address_components[3].short_name
           );
-
-          fetch(
-            "api.openweathermap.org/data/2.5/forecast?lat=position.coords.latitude&lon=position.coords.longitude&appid=process.env.REACT_APP_OPEN_WEATHER_API_KEY"
-          ).then((response) => {
-            console.log(response.json());
-          });
+          setForecast(
+            fetchForecast(response.results[0].address_components[3].short_name)
+          );
         },
         (error) => {
           console.error(error);
