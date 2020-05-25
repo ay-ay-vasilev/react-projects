@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Geocode from "react-geocode";
 import dayjs from "dayjs";
 // Custom components
 import WeatherCard from "./WeatherCard";
@@ -30,6 +31,51 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function WeatherForecast() {
+  const [addr, setAddr] = useState("");
+  const [forecast, setForecast] = useState("");
+
+  const getPosition = () => {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  };
+
+  const getWeather = async (position) => {
+    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+    Geocode.setLanguage("en");
+    Geocode.setRegion("kr");
+
+    Geocode.fromLatLng(
+      position.coords.latitude,
+      position.coords.longitude
+    ).then(
+      (response) => {
+        setAddr(
+          response.results[0].address_components[2].short_name +
+            ", " +
+            response.results[0].address_components[3].short_name
+        );
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+
+    const api_call = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
+    );
+    const data = await api_call.json();
+    setForecast(data);
+  };
+
+  useEffect(() => {
+    getPosition().then((position) => {
+      getWeather(position);
+    });
+  }, []);
+
+  console.log(forecast);
+
   const classes = useStyles();
   const today = new Date();
   const date = {
@@ -89,7 +135,7 @@ export default function WeatherForecast() {
         </Grid>
 
         <Grid item>
-          <WeatherDetails date={date} weather={sun} />
+          <WeatherDetails addr={addr} date={date} weather={sun} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>
