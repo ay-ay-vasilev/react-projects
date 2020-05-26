@@ -18,15 +18,16 @@ import moon from "../images/moon.png";
 import rain from "../images/rain.png";
 import rainbow from "../images/rainbow.png";
 import snow from "../images/snow.png";
-import sun from "../images/sun.png";
+import clear from "../images/sun.png";
 
 const useStyles = makeStyles((theme) => ({
-  forecast: {
+  forecastStyle: {
     margin: "auto",
     width: theme.spacing(14) * 5,
     height: theme.spacing(18) * 4,
     padding: theme.spacing(2),
     spacing: theme.spacing(2),
+    backgroundColor: "#F2F6F7",
   },
 }));
 
@@ -34,13 +35,41 @@ export default function WeatherForecast() {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
 
+  const pickWeatherPic = (weather) => {
+    let pic;
+    switch (weather) {
+      case "Clouds":
+        pic = cloud;
+        break;
+      case "Clear":
+        pic = clear;
+        break;
+      case "Drizzle":
+        pic = cloudy;
+        break;
+      case "Rain":
+        pic = rain;
+        break;
+      case "Snow":
+        pic = snow;
+        break;
+      case "Thunderstorm":
+        pic = lightning;
+        break;
+      default:
+        pic = rainbow;
+        break;
+    }
+    return pic;
+  };
+
   const getPosition = () => {
     return new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
   };
 
-  const getWeather = async (position) => {
+  const getWeatherAndLocation = async (position) => {
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
     Geocode.setLanguage("en");
     Geocode.setRegion("kr");
@@ -49,41 +78,36 @@ export default function WeatherForecast() {
       position.coords.latitude,
       position.coords.longitude
     ).then(
-      (response) => {
+      async (response) => {
         setAddr(
           response.results[0].address_components[2].short_name +
             ", " +
             response.results[0].address_components[3].short_name
         );
+
+        const api_call = await fetch(
+          `https://api.openweathermap.org/data/2.5/forecast?q=${response.results[0].address_components[3].short_name}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
+        );
+        const data = await api_call.json();
+        setForecast(data);
       },
       (error) => {
         console.error(error);
       }
     );
-
-    const api_call = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
-    );
-    const data = await api_call.json();
-    setForecast(data);
   };
 
   useEffect(() => {
     getPosition().then((position) => {
-      getWeather(position);
+      getWeatherAndLocation(position);
     });
   }, []);
-
-  console.log(forecast);
 
   const classes = useStyles();
   const today = new Date();
   const date = {
     day: dayjs(today).format("dddd"),
-    time:
-      dayjs(today).format("Z A").slice(1)[0] === "0"
-        ? dayjs(today).format("Z A").slice(2)
-        : dayjs(today).format("Z A").slice(1),
+    time: Math.floor(dayjs(today).format("H") / 3) * 3,
   };
 
   let dayCards = [];
@@ -97,18 +121,53 @@ export default function WeatherForecast() {
     rain,
     rainbow,
     snow,
-    sun,
+    clear,
   ];
 
-  for (let i = 0; i < 5; i++) {
-    const newDate = new Date(today.getTime() + i * 86400000);
+  if (forecast !== "") {
+    if (forecast.list.length > 0) {
+      console.log(forecast.list);
 
-    dayCards.push({
-      date: newDate,
-      weather: weathers[i],
-      maxTemp: 70 + i,
-      minTemp: 70 - i,
-    });
+      for (let i = 0; i < 5; i++) {
+        const newDate = new Date(today.getTime() + i * 86400000);
+
+        dayCards.push({
+          date: newDate,
+          reportHours: [9, 12, 15, 18, 21, 0, 3, 6],
+          weather: [
+            pickWeatherPic(forecast.list[i * 8].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 1].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 2].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 3].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 4].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 5].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 6].weather[0].main),
+            pickWeatherPic(forecast.list[i * 8 + 7].weather[0].main),
+          ],
+          maxTemp: [
+            forecast.list[i * 8].main.temp_max,
+            forecast.list[i * 8 + 1].main.temp_max,
+            forecast.list[i * 8 + 2].main.temp_max,
+            forecast.list[i * 8 + 3].main.temp_max,
+            forecast.list[i * 8 + 4].main.temp_max,
+            forecast.list[i * 8 + 5].main.temp_max,
+            forecast.list[i * 8 + 6].main.temp_max,
+            forecast.list[i * 8 + 7].main.temp_max,
+          ],
+          minTemp: [
+            forecast.list[i * 8].main.temp_min,
+            forecast.list[i * 8 + 1].main.temp_min,
+            forecast.list[i * 8 + 2].main.temp_min,
+            forecast.list[i * 8 + 3].main.temp_min,
+            forecast.list[i * 8 + 4].main.temp_min,
+            forecast.list[i * 8 + 5].main.temp_min,
+            forecast.list[i * 8 + 6].main.temp_min,
+            forecast.list[i * 8 + 7].main.temp_min,
+          ],
+        });
+        console.log(dayCards);
+      }
+    }
   }
 
   let dayCardComponents = dayCards.map((dayCard) => (
@@ -123,23 +182,23 @@ export default function WeatherForecast() {
   ));
 
   return (
-    <Card className={classes.forecast}>
+    <Card className={classes.forecastStyle}>
       <Grid
         container
         justify="space-between"
         direction="column"
         style={{ width: "100%", height: "100%" }}
       >
-        <Grid item container direction="row" justify="center">
-          {dayCardComponents}
-        </Grid>
-
         <Grid item>
-          <WeatherDetails addr={addr} date={date} weather={sun} />
+          <WeatherDetails addr={addr} date={date} weather={clear} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>
           weather graph?
+        </Grid>
+
+        <Grid item container direction="row" justify="center">
+          {dayCardComponents}
         </Grid>
       </Grid>
     </Card>

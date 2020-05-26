@@ -11,12 +11,13 @@ export default function WeatherDetails(props) {
         <Grid item>
           <Typography variant="h5">{props.addr}</Typography>
         </Grid>
-        <Grid item style={{ color: "#aaaaaa" }}>
+        <Grid item style={{ color: "#000000" }}>
           <Typography variant="body2">
-            {props.date.day} {props.date.time}
+            {props.date.day} {props.date.time % 12}:00{" "}
+            {props.date.time < 12 ? "AM" : "PM"}
           </Typography>
         </Grid>
-        <Grid item style={{ color: "#aaaaaa" }}>
+        <Grid item style={{ color: "#000000" }}>
           <Typography variant="body2">Sunny</Typography>
         </Grid>
       </Grid>
@@ -51,7 +52,7 @@ export default function WeatherDetails(props) {
           </Grid>
         </Grid>
         <Grid item container direction="column" spacing={2} xs={6}>
-          <Grid item container direction="column" style={{ color: "#aaaaaa" }}>
+          <Grid item container direction="column" style={{ color: "#000000" }}>
             <Grid item>
               <Typography variant="body2">Precipitation: </Typography>
             </Grid>
