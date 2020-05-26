@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(18) * 4,
     padding: theme.spacing(2),
     spacing: theme.spacing(2),
-    backgroundColor: "#F2F6F7",
   },
 }));
 
@@ -39,13 +38,13 @@ export default function WeatherForecast() {
     let pic;
     switch (weather) {
       case "Clouds":
-        pic = cloud;
+        pic = cloudy;
         break;
       case "Clear":
         pic = clear;
         break;
       case "Drizzle":
-        pic = cloudy;
+        pic = rainbow;
         break;
       case "Rain":
         pic = rain;
