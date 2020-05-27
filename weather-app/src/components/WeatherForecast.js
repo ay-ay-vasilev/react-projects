@@ -8,17 +8,6 @@ import WeatherDetails from "./WeatherDetails";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-// weather images
-import sunny from "../images/sunny.png";
-import cloud from "../images/cloud.png";
-import cloudy from "../images/cloudy.png";
-import lightning from "../images/lightning.png";
-import mooncloud from "../images/mooncloud.png";
-import moon from "../images/moon.png";
-import rain from "../images/rain.png";
-import rainbow from "../images/rainbow.png";
-import snow from "../images/snow.png";
-import clear from "../images/sun.png";
 
 const useStyles = makeStyles((theme) => ({
   forecastStyle: {
@@ -34,40 +23,11 @@ export default function WeatherForecast() {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
 
-  const pickWeatherPic = (weather) => {
-    let pic;
-    switch (weather) {
-      case "Clouds":
-        pic = cloudy;
-        break;
-      case "Clear":
-        pic = clear;
-        break;
-      case "Drizzle":
-        pic = rainbow;
-        break;
-      case "Rain":
-        pic = rain;
-        break;
-      case "Snow":
-        pic = snow;
-        break;
-      case "Thunderstorm":
-        pic = lightning;
-        break;
-      default:
-        pic = rainbow;
-        break;
-    }
-    return pic;
-  };
-
   const getPosition = () => {
     return new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, reject);
     });
   };
-
   const getWeatherAndLocation = async (position) => {
     Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
     Geocode.setLanguage("en");
@@ -79,7 +39,9 @@ export default function WeatherForecast() {
     ).then(
       async (response) => {
         setAddr(
-          response.results[0].address_components[2].short_name +
+          response.results[0].address_components[1].short_name +
+            ", " +
+            response.results[0].address_components[2].short_name +
             ", " +
             response.results[0].address_components[3].short_name
         );
@@ -110,18 +72,6 @@ export default function WeatherForecast() {
   };
 
   let dayCards = [];
-  let weathers = [
-    sunny,
-    cloud,
-    cloudy,
-    lightning,
-    moon,
-    mooncloud,
-    rain,
-    rainbow,
-    snow,
-    clear,
-  ];
 
   if (forecast !== "") {
     if (forecast.list.length > 0) {
@@ -132,52 +82,16 @@ export default function WeatherForecast() {
 
         dayCards.push({
           date: newDate,
-          reportHours: [9, 12, 15, 18, 21, 0, 3, 6],
-          weather: [
-            pickWeatherPic(forecast.list[i * 8].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 1].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 2].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 3].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 4].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 5].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 6].weather[0].main),
-            pickWeatherPic(forecast.list[i * 8 + 7].weather[0].main),
-          ],
-          maxTemp: [
-            forecast.list[i * 8].main.temp_max,
-            forecast.list[i * 8 + 1].main.temp_max,
-            forecast.list[i * 8 + 2].main.temp_max,
-            forecast.list[i * 8 + 3].main.temp_max,
-            forecast.list[i * 8 + 4].main.temp_max,
-            forecast.list[i * 8 + 5].main.temp_max,
-            forecast.list[i * 8 + 6].main.temp_max,
-            forecast.list[i * 8 + 7].main.temp_max,
-          ],
-          minTemp: [
-            forecast.list[i * 8].main.temp_min,
-            forecast.list[i * 8 + 1].main.temp_min,
-            forecast.list[i * 8 + 2].main.temp_min,
-            forecast.list[i * 8 + 3].main.temp_min,
-            forecast.list[i * 8 + 4].main.temp_min,
-            forecast.list[i * 8 + 5].main.temp_min,
-            forecast.list[i * 8 + 6].main.temp_min,
-            forecast.list[i * 8 + 7].main.temp_min,
-          ],
+          weather: forecast.list.slice(i * 8, i * 8 + 7),
         });
         console.log(dayCards);
       }
     }
   }
 
+  let id = 0;
   let dayCardComponents = dayCards.map((dayCard) => (
-    <WeatherCard
-      info={dayCard}
-      key={dayCard.date}
-      date={dayCard.date}
-      weather={dayCard.weather}
-      maxTemp={dayCard.maxTemp}
-      minTemp={dayCard.minTemp}
-    />
+    <WeatherCard info={dayCard} key={id++} />
   ));
 
   return (
@@ -189,7 +103,7 @@ export default function WeatherForecast() {
         style={{ width: "100%", height: "100%" }}
       >
         <Grid item>
-          <WeatherDetails addr={addr} date={date} weather={clear} />
+          <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>

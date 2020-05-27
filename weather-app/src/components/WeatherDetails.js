@@ -2,9 +2,28 @@ import React from "react";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import CardMedia from "@material-ui/core/CardMedia";
 
 export default function WeatherDetails(props) {
+  let icon;
+  let timePeriod =
+    props.date.time < 9
+      ? Math.floor((props.date.time - 9) / 3) + 8
+      : Math.floor((props.date.time - 9) / 3);
+  let humidity = "???";
+  let wind = "???";
+  let weather = "???";
+
+  if (typeof props.info != "undefined") {
+    weather = icon = props.info.weather.map((item) => item.weather[0].main)[
+      timePeriod
+    ];
+    icon = props.info.weather.map((item) => item.weather[0].icon)[timePeriod];
+    humidity = props.info.weather.map((item) => item.main.humidity)[timePeriod];
+    wind = props.info.weather.map((item) => item.wind.speed)[timePeriod];
+  } else {
+    icon = "none";
+  }
+
   return (
     <Grid container direction="column" spacing={2}>
       <Grid item container direction="column">
@@ -18,7 +37,7 @@ export default function WeatherDetails(props) {
           </Typography>
         </Grid>
         <Grid item style={{ color: "#000000" }}>
-          <Typography variant="body2">Sunny</Typography>
+          <Typography variant="body2">{weather}</Typography>
         </Grid>
       </Grid>
 
@@ -32,8 +51,9 @@ export default function WeatherDetails(props) {
           xs={6}
         >
           <Grid item style={{ paddingTop: "8pt" }}>
-            <CardMedia
-              image={props.weather}
+            <img
+              alt="404"
+              src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
               style={{
                 height: "60px",
                 width: "60px",
@@ -54,19 +74,15 @@ export default function WeatherDetails(props) {
         <Grid item container direction="column" spacing={2} xs={6}>
           <Grid item container direction="column" style={{ color: "#000000" }}>
             <Grid item>
-              <Typography variant="body2">Precipitation: </Typography>
+              <Typography variant="body2">Humidity: {humidity}%</Typography>
             </Grid>
             <Grid item>
-              <Typography variant="body2">Humidity: </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="body2">Wind: </Typography>
+              <Typography variant="body2">Wind: {wind} m/s</Typography>
             </Grid>
           </Grid>
           <Grid item>
             <Grid item>
               <button>Temperature</button>
-              <button>Precipitation</button>
               <button>Wind</button>
             </Grid>
           </Grid>
