@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 import dayjs from "dayjs";
+import Test from "./Test";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -22,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 export default function WeatherForecast() {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
-
   const getPosition = () => {
     return new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -102,16 +102,16 @@ export default function WeatherForecast() {
         direction="column"
         style={{ width: "100%", height: "100%" }}
       >
+        <Grid item container direction="row" justify="center">
+          {dayCardComponents}
+        </Grid>
+
         <Grid item>
           <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>
-          weather graph?
-        </Grid>
-
-        <Grid item container direction="row" justify="center">
-          {dayCardComponents}
+          <Test />
         </Grid>
       </Grid>
     </Card>
