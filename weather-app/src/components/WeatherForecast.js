@@ -102,16 +102,16 @@ export default function WeatherForecast() {
         direction="column"
         style={{ width: "100%", height: "100%" }}
       >
-        <Grid item container direction="row" justify="center">
-          {dayCardComponents}
-        </Grid>
-
         <Grid item>
           <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
         </Grid>
 
         <Grid item style={{ margin: "auto" }}>
           <Test />
+        </Grid>
+
+        <Grid item container direction="row" justify="center">
+          {dayCardComponents}
         </Grid>
       </Grid>
     </Card>

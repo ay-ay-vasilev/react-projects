@@ -11,17 +11,19 @@ import { curveMonotoneX } from "@vx/curve";
 export default function Test() {
   const data = appleStock;
 
-  const width = 750;
-  const height = 400;
+  const width = 560;
+  const height = 100;
 
   const margin = {
-    top: 60,
-    bottom: 60,
-    left: 80,
-    right: 80,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   };
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
+
+  console.log("DUMMY DATA", data);
 
   const x = (d) => new Date(d.date); // d.date is unix timestamps
   const y = (d) => d.close;
