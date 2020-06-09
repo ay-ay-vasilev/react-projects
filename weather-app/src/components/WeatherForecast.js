@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
   forecastStyle: {
     margin: "auto",
     width: theme.spacing(14) * 5,
-    height: theme.spacing(18) * 4,
     padding: theme.spacing(2),
     spacing: theme.spacing(2),
   },
@@ -94,6 +93,8 @@ export default function WeatherForecast() {
     <WeatherCard info={dayCard} key={id++} />
   ));
 
+  console.log(dayCards[0]);
+
   return (
     <Card className={classes.forecastStyle}>
       <Grid
@@ -106,7 +107,7 @@ export default function WeatherForecast() {
           <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
         </Grid>
 
-        <Grid item style={{ margin: "auto" }}>
+        <Grid item>
           <Test />
         </Grid>
 

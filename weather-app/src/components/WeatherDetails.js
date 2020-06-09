@@ -12,8 +12,15 @@ export default function WeatherDetails(props) {
   let humidity = "???";
   let wind = "???";
   let weather = "???";
+  let curTemp = "?";
+
+  console.log("TIMEPERIOD", timePeriod);
 
   if (typeof props.info != "undefined") {
+    curTemp = Math.round(
+      props.info.weather.map((item) => item.main.feels_like)[timePeriod] -
+        273.15
+    );
     weather = icon = props.info.weather.map((item) => item.weather[0].main)[
       timePeriod
     ];
@@ -64,7 +71,7 @@ export default function WeatherDetails(props) {
           </Grid>
           <Grid item>
             <Typography variant="h3" style={{ fontSize: "50pt" }}>
-              22
+              {curTemp}
             </Typography>
           </Grid>
           <Grid item style={{ paddingTop: "11pt" }}>
