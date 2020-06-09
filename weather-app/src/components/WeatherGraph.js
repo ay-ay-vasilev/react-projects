@@ -7,20 +7,14 @@ import { LinePath, AreaClosed } from "@vx/shape";
 import { AxisBottom } from "@vx/axis";
 import { curveMonotoneX } from "@vx/curve";
 
-export default function Test() {
-  const data = [
-    { day: 1, temp: 30 },
-    { day: 2, temp: 27 },
-    { day: 3, temp: 23 },
-    { day: 4, temp: 21 },
-    { day: 5, temp: 20 },
-    { day: 6, temp: 20 },
-    { day: 7, temp: 24 },
-    { day: 8, temp: 25 },
-  ];
+export default function WeatherGraph(props) {
+  const data = props.info.weather.map((item) => ({
+    timeOfDay: parseInt(item.dt_txt.slice(11, 13)),
+    temp: Math.round(item.main.feels_like - 273.15),
+  }));
 
   const width = 560;
-  const height = 200;
+  const height = 140;
 
   const margin = {
     top: 50,
@@ -31,7 +25,14 @@ export default function Test() {
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const x = (d) => new Date(d.day);
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const x = (d) =>
+    d.timeOfDay >= 12
+      ? today.setHours(d.timeOfDay)
+      : tomorrow.setHours(d.timeOfDay);
   const y = (d) => d.temp - 18;
 
   data.map(y);
@@ -46,9 +47,9 @@ export default function Test() {
     domain: [0, max(data, y)],
   });
 
-  const testYScale = scaleLinear({
+  const testXScale = scaleLinear({
     range: [0, xMax],
-    domain: [3, 24],
+    domain: [1, 8],
   });
 
   const chart = (
@@ -74,9 +75,9 @@ export default function Test() {
           curve={curveMonotoneX}
         />
         <AxisBottom
-          scale={testYScale}
+          scale={testXScale}
           top={yMax}
-          numTicks={5}
+          numTicks={7}
           stroke={"transparent"}
           tickStroke={"transparent"}
           tickLabelProps={() => ({

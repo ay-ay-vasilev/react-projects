@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Geocode from "react-geocode";
 import dayjs from "dayjs";
-import Test from "./Test";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -106,11 +105,6 @@ export default function WeatherForecast() {
         <Grid item>
           <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
         </Grid>
-
-        <Grid item>
-          <Test />
-        </Grid>
-
         <Grid item container direction="row" justify="center">
           {dayCardComponents}
         </Grid>

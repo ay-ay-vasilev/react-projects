@@ -2,6 +2,8 @@ import React from "react";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+// Custom components
+import WeatherGraph from "./WeatherGraph";
 
 export default function WeatherDetails(props) {
   let icon;
@@ -13,8 +15,7 @@ export default function WeatherDetails(props) {
   let wind = "???";
   let weather = "???";
   let curTemp = "?";
-
-  console.log("TIMEPERIOD", timePeriod);
+  let weatherGraph = "";
 
   if (typeof props.info != "undefined") {
     curTemp = Math.round(
@@ -27,6 +28,7 @@ export default function WeatherDetails(props) {
     icon = props.info.weather.map((item) => item.weather[0].icon)[timePeriod];
     humidity = props.info.weather.map((item) => item.main.humidity)[timePeriod];
     wind = props.info.weather.map((item) => item.wind.speed)[timePeriod];
+    weatherGraph = <WeatherGraph info={props.info} />;
   } else {
     icon = "none";
   }
@@ -78,7 +80,14 @@ export default function WeatherDetails(props) {
             <Typography>°C</Typography>
           </Grid>
         </Grid>
-        <Grid item container direction="column" spacing={2} xs={6}>
+        <Grid
+          item
+          container
+          direction="column"
+          justify="center"
+          spacing={2}
+          xs={6}
+        >
           <Grid item container direction="column" style={{ color: "#000000" }}>
             <Grid item>
               <Typography variant="body2">Humidity: {humidity}%</Typography>
@@ -87,14 +96,10 @@ export default function WeatherDetails(props) {
               <Typography variant="body2">Wind: {wind} m/s</Typography>
             </Grid>
           </Grid>
-          <Grid item>
-            <Grid item>
-              <button>Temperature</button>
-              <button>Wind</button>
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
+
+      <Grid item>{weatherGraph}</Grid>
     </Grid>
   );
 }
