@@ -5,26 +5,8 @@ import Box from "@material-ui/core/Box";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  weatherCard: {
-    width: theme.spacing(14),
-    height: theme.spacing(20),
-  },
-  weatherIcon: {
-    height: theme.spacing(6),
-    width: theme.spacing(6),
-    alignSelf: "center",
-    justify: "center",
-  },
-  grayText: {
-    color: "#aaaaaa",
-  },
-}));
 
 function mode(array) {
   if (array.length === 0) return null;
@@ -44,7 +26,7 @@ function mode(array) {
 }
 
 export default function WeatherCard(props) {
-  const classes = useStyles();
+  const classes = props.classes;
   const { date, weather } = props.info;
 
   const maxT = Math.round(
@@ -62,7 +44,7 @@ export default function WeatherCard(props) {
   const icon = mode(weather.map((item) => item.weather[0].icon));
 
   return (
-    <Box className={classes.weatherCard} color="#000000">
+    <Box className={classes.weatherCard}>
       <CardActionArea>
         <CardHeader
           classes={{

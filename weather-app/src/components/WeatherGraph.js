@@ -4,7 +4,6 @@ import { Group } from "@vx/group";
 import { scaleTime, scaleLinear } from "@vx/scale";
 import { extent, max } from "d3-array";
 import { LinePath, AreaClosed } from "@vx/shape";
-import { AxisBottom } from "@vx/axis";
 import { curveMonotoneX } from "@vx/curve";
 
 export default function WeatherGraph(props) {
@@ -14,11 +13,11 @@ export default function WeatherGraph(props) {
   }));
 
   const width = 560;
-  const height = 140;
+  const height = 80;
 
   const margin = {
-    top: 50,
-    bottom: 20,
+    top: 30,
+    bottom: 0,
     left: 0,
     right: 0,
   };
@@ -30,14 +29,19 @@ export default function WeatherGraph(props) {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const x = (d) =>
-    d.timeOfDay >= 12
-      ? today.setHours(d.timeOfDay)
-      : tomorrow.setHours(d.timeOfDay);
-  const y = (d) => d.temp - 18;
+    d.timeOfDay < 9
+      ? new Date(tomorrow.setHours(d.timeOfDay))
+      : new Date(today.setHours(d.timeOfDay));
 
-  data.map(y);
+  const y = (d) =>
+    d.temp -
+    (Math.min.apply(
+      null,
+      data.map((item) => item.temp)
+    ) -
+      2);
 
-  const xScale = scaleLinear({
+  const xScale = scaleTime({
     range: [0, xMax],
     domain: extent(data, x),
   });
@@ -45,11 +49,6 @@ export default function WeatherGraph(props) {
   const yScale = scaleLinear({
     range: [yMax, 0],
     domain: [0, max(data, y)],
-  });
-
-  const testXScale = scaleLinear({
-    range: [0, xMax],
-    domain: [1, 8],
   });
 
   const chart = (
@@ -73,17 +72,6 @@ export default function WeatherGraph(props) {
           strokeWidth={0}
           fill={"#EAA18F"}
           curve={curveMonotoneX}
-        />
-        <AxisBottom
-          scale={testXScale}
-          top={yMax}
-          numTicks={7}
-          stroke={"transparent"}
-          tickStroke={"transparent"}
-          tickLabelProps={() => ({
-            fill: "#aaaaaa",
-            fontSize: 11,
-          })}
         />
       </Group>
     </svg>

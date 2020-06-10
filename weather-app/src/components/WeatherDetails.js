@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import WeatherGraph from "./WeatherGraph";
 
 export default function WeatherDetails(props) {
+  const classes = props.classes;
+
   let icon;
   let timePeriod =
     props.date.time < 9
@@ -39,13 +41,13 @@ export default function WeatherDetails(props) {
         <Grid item>
           <Typography variant="h5">{props.addr}</Typography>
         </Grid>
-        <Grid item style={{ color: "#000000" }}>
+        <Grid item>
           <Typography variant="body2">
             {props.date.day} {props.date.time % 12}:00{" "}
             {props.date.time < 12 ? "AM" : "PM"}
           </Typography>
         </Grid>
-        <Grid item style={{ color: "#000000" }}>
+        <Grid item>
           <Typography variant="body2">{weather}</Typography>
         </Grid>
       </Grid>
@@ -61,14 +63,9 @@ export default function WeatherDetails(props) {
         >
           <Grid item style={{ paddingTop: "8pt" }}>
             <img
-              alt="404"
+              alt="?"
               src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
-              style={{
-                height: "60px",
-                width: "60px",
-                alignSelf: "center",
-                justify: "center",
-              }}
+              className={classes.weatherIconBig}
             />
           </Grid>
           <Grid item>
@@ -88,7 +85,7 @@ export default function WeatherDetails(props) {
           spacing={2}
           xs={6}
         >
-          <Grid item container direction="column" style={{ color: "#000000" }}>
+          <Grid item container direction="column">
             <Grid item>
               <Typography variant="body2">Humidity: {humidity}%</Typography>
             </Grid>
@@ -99,7 +96,39 @@ export default function WeatherDetails(props) {
         </Grid>
       </Grid>
 
-      <Grid item>{weatherGraph}</Grid>
+      <Grid container item direction="column">
+        <Grid item>{weatherGraph}</Grid>
+        <Typography variant="body2">
+          <Grid
+            className={classes.grayCenterText}
+            container
+            item
+            direction="row"
+          >
+            <Grid xs item>
+              9 AM
+            </Grid>
+            <Grid xs item>
+              12 PM
+            </Grid>
+            <Grid xs item>
+              3 PM
+            </Grid>
+            <Grid xs item>
+              6 PM
+            </Grid>
+            <Grid xs item>
+              9 PM
+            </Grid>
+            <Grid xs item>
+              12 AM
+            </Grid>
+            <Grid xs item>
+              3 AM
+            </Grid>
+          </Grid>
+        </Typography>
+      </Grid>
     </Grid>
   );
 }

@@ -16,11 +16,35 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     spacing: theme.spacing(2),
   },
+  weatherCard: {
+    width: theme.spacing(14),
+    height: theme.spacing(20),
+  },
+  weatherIcon: {
+    height: theme.spacing(6),
+    width: theme.spacing(6),
+    alignSelf: "center",
+    justify: "center",
+  },
+  weatherIconBig: {
+    height: theme.spacing(8),
+    width: theme.spacing(8),
+    alignSelf: "center",
+    justify: "center",
+  },
+  grayCenterText: {
+    textAlign: "center",
+    color: "#aaaaaa",
+  },
+  grayText: {
+    color: "#aaaaaa",
+  },
 }));
 
 export default function WeatherForecast() {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
+
   const getPosition = () => {
     return new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -64,6 +88,7 @@ export default function WeatherForecast() {
 
   const classes = useStyles();
   const today = new Date();
+
   const date = {
     day: dayjs(today).format("dddd"),
     time: Math.floor(dayjs(today).format("H") / 3) * 3,
@@ -89,7 +114,7 @@ export default function WeatherForecast() {
 
   let id = 0;
   let dayCardComponents = dayCards.map((dayCard) => (
-    <WeatherCard info={dayCard} key={id++} />
+    <WeatherCard info={dayCard} key={id++} classes={classes} />
   ));
 
   console.log(dayCards[0]);
@@ -103,7 +128,12 @@ export default function WeatherForecast() {
         style={{ width: "100%", height: "100%" }}
       >
         <Grid item>
-          <WeatherDetails addr={addr} date={date} info={dayCards[0]} />
+          <WeatherDetails
+            addr={addr}
+            date={date}
+            info={dayCards[0]}
+            classes={classes}
+          />
         </Grid>
         <Grid item container direction="row" justify="center">
           {dayCardComponents}
