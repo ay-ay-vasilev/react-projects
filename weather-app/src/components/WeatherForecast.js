@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Geocode from "react-geocode";
 import dayjs from "dayjs";
 // Custom components
@@ -98,8 +99,6 @@ export default function WeatherForecast() {
 
   if (forecast !== "") {
     if (forecast.list.length > 0) {
-      console.log(forecast.list);
-
       for (let i = 0; i < 5; i++) {
         const newDate = new Date(today.getTime() + i * 86400000);
 
@@ -107,7 +106,6 @@ export default function WeatherForecast() {
           date: newDate,
           weather: forecast.list.slice(i * 8, i * 8 + 7),
         });
-        console.log(dayCards);
       }
     }
   }
@@ -117,28 +115,28 @@ export default function WeatherForecast() {
     <WeatherCard info={dayCard} key={id++} classes={classes} />
   ));
 
-  console.log(dayCards[0]);
-
   return (
-    <Card className={classes.forecastStyle}>
-      <Grid
-        container
-        justify="space-between"
-        direction="column"
-        style={{ width: "100%", height: "100%" }}
-      >
-        <Grid item>
-          <WeatherDetails
-            addr={addr}
-            date={date}
-            info={dayCards[0]}
-            classes={classes}
-          />
+    <Router>
+      <Card className={classes.forecastStyle}>
+        <Grid
+          container
+          justify="space-between"
+          direction="column"
+          style={{ width: "100%", height: "100%" }}
+        >
+          <Grid item>
+            <WeatherDetails
+              addr={addr}
+              date={date}
+              info={dayCards[0]}
+              classes={classes}
+            />
+          </Grid>
+          <Grid item container direction="row" justify="center">
+            {dayCardComponents}
+          </Grid>
         </Grid>
-        <Grid item container direction="row" justify="center">
-          {dayCardComponents}
-        </Grid>
-      </Grid>
-    </Card>
+      </Card>
+    </Router>
   );
 }

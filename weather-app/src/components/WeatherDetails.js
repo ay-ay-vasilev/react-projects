@@ -98,36 +98,30 @@ export default function WeatherDetails(props) {
 
       <Grid container item direction="column">
         <Grid item>{weatherGraph}</Grid>
-        <Typography variant="body2">
-          <Grid
-            className={classes.grayCenterText}
-            container
-            item
-            direction="row"
-          >
-            <Grid xs item>
-              9 AM
-            </Grid>
-            <Grid xs item>
-              12 PM
-            </Grid>
-            <Grid xs item>
-              3 PM
-            </Grid>
-            <Grid xs item>
-              6 PM
-            </Grid>
-            <Grid xs item>
-              9 PM
-            </Grid>
-            <Grid xs item>
-              12 AM
-            </Grid>
-            <Grid xs item>
-              3 AM
-            </Grid>
+
+        <Grid className={classes.grayCenterText} container item direction="row">
+          <Grid xs item>
+            <Typography variant="body2">9 AM</Typography>
           </Grid>
-        </Typography>
+          <Grid xs item>
+            <Typography variant="body2">12 PM</Typography>
+          </Grid>
+          <Grid xs item>
+            <Typography variant="body2">3 PM</Typography>
+          </Grid>
+          <Grid xs item>
+            <Typography variant="body2">6 PM</Typography>
+          </Grid>
+          <Grid xs item>
+            <Typography variant="body2">9 PM</Typography>
+          </Grid>
+          <Grid xs item>
+            <Typography variant="body2">12 AM</Typography>
+          </Grid>
+          <Grid xs item>
+            <Typography variant="body2">3 AM</Typography>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
