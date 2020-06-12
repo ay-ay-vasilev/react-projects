@@ -1,7 +1,9 @@
 import React from "react";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 // MUI
 import Box from "@material-ui/core/Box";
+import MenuItem from "@material-ui/core/MenuItem";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -44,8 +46,8 @@ export default function WeatherCard(props) {
   const icon = mode(weather.map((item) => item.weather[0].icon));
 
   return (
-    <Box className={classes.weatherCard}>
-      <CardActionArea>
+    <MenuItem style={{ padding: "0" }} component={Link} to={`/${props.id}`}>
+      <Box className={classes.weatherCard}>
         <CardHeader
           classes={{
             title: classes.grayText,
@@ -71,7 +73,7 @@ export default function WeatherCard(props) {
             </Grid>
           </Grid>
         </CardContent>
-      </CardActionArea>
-    </Box>
+      </Box>
+    </MenuItem>
   );
 }

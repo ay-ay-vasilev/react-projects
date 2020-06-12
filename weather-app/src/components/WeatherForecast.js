@@ -112,7 +112,7 @@ export default function WeatherForecast() {
 
   let id = 0;
   let dayCardComponents = dayCards.map((dayCard) => (
-    <WeatherCard info={dayCard} key={id++} classes={classes} />
+    <WeatherCard info={dayCard} key={id++} id={id} classes={classes} />
   ));
 
   return (
@@ -124,14 +124,59 @@ export default function WeatherForecast() {
           direction="column"
           style={{ width: "100%", height: "100%" }}
         >
-          <Grid item>
-            <WeatherDetails
-              addr={addr}
-              date={date}
-              info={dayCards[0]}
-              classes={classes}
-            />
-          </Grid>
+          <Switch>
+            <Route path="/1">
+              <Grid item>
+                <WeatherDetails
+                  addr={addr}
+                  date={date}
+                  info={dayCards[0]}
+                  classes={classes}
+                />
+              </Grid>
+            </Route>
+            <Route path="/2">
+              <Grid item>
+                <WeatherDetails
+                  addr={addr}
+                  date={date}
+                  info={dayCards[1]}
+                  classes={classes}
+                />
+              </Grid>
+            </Route>
+            <Route path="/3">
+              <Grid item>
+                <WeatherDetails
+                  addr={addr}
+                  date={date}
+                  info={dayCards[2]}
+                  classes={classes}
+                />
+              </Grid>
+            </Route>
+            <Route path="/4">
+              <Grid item>
+                <WeatherDetails
+                  addr={addr}
+                  date={date}
+                  info={dayCards[3]}
+                  classes={classes}
+                />
+              </Grid>
+            </Route>
+            <Route path="/5">
+              <Grid item>
+                <WeatherDetails
+                  addr={addr}
+                  date={date}
+                  info={dayCards[4]}
+                  classes={classes}
+                />
+              </Grid>
+            </Route>
+          </Switch>
+
           <Grid item container direction="row" justify="center">
             {dayCardComponents}
           </Grid>
