@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Geocode from "react-geocode";
-import dayjs from "dayjs";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -90,11 +94,6 @@ export default function WeatherForecast() {
   const classes = useStyles();
   const today = new Date();
 
-  const date = {
-    day: dayjs(today).format("dddd"),
-    time: Math.floor(dayjs(today).format("H") / 3) * 3,
-  };
-
   let dayCards = [];
 
   if (forecast !== "") {
@@ -112,7 +111,14 @@ export default function WeatherForecast() {
 
   let id = 0;
   let dayCardComponents = dayCards.map((dayCard) => (
-    <WeatherCard info={dayCard} key={id++} id={id} classes={classes} />
+    <WeatherCard info={dayCard} id={id} classes={classes} key={id++} />
+  ));
+
+  id = 0;
+  let dailyDetails = dayCards.map((dayCard) => (
+    <Route path={`/${id++}`} key={id}>
+      <WeatherDetails addr={addr} info={dayCard} classes={classes} key={id} />
+    </Route>
   ));
 
   return (
@@ -125,56 +131,10 @@ export default function WeatherForecast() {
           style={{ width: "100%", height: "100%" }}
         >
           <Switch>
-            <Route path="/1">
-              <Grid item>
-                <WeatherDetails
-                  addr={addr}
-                  date={date}
-                  info={dayCards[0]}
-                  classes={classes}
-                />
-              </Grid>
+            <Route exact path="/">
+              <Redirect to="/0" />
             </Route>
-            <Route path="/2">
-              <Grid item>
-                <WeatherDetails
-                  addr={addr}
-                  date={date}
-                  info={dayCards[1]}
-                  classes={classes}
-                />
-              </Grid>
-            </Route>
-            <Route path="/3">
-              <Grid item>
-                <WeatherDetails
-                  addr={addr}
-                  date={date}
-                  info={dayCards[2]}
-                  classes={classes}
-                />
-              </Grid>
-            </Route>
-            <Route path="/4">
-              <Grid item>
-                <WeatherDetails
-                  addr={addr}
-                  date={date}
-                  info={dayCards[3]}
-                  classes={classes}
-                />
-              </Grid>
-            </Route>
-            <Route path="/5">
-              <Grid item>
-                <WeatherDetails
-                  addr={addr}
-                  date={date}
-                  info={dayCards[4]}
-                  classes={classes}
-                />
-              </Grid>
-            </Route>
+            {dailyDetails}
           </Switch>
 
           <Grid item container direction="row" justify="center">

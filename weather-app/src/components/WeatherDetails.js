@@ -1,4 +1,5 @@
 import React from "react";
+import dayjs from "dayjs";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -6,13 +7,17 @@ import Typography from "@material-ui/core/Typography";
 import WeatherGraph from "./WeatherGraph";
 
 export default function WeatherDetails(props) {
-  const classes = props.classes;
+  let date = {
+    day: "???",
+    time: "???",
+  };
 
+  let timePeriod;
+  let timeText;
+
+  const classes = props.classes;
   let icon;
-  let timePeriod =
-    props.date.time < 9
-      ? Math.floor((props.date.time - 9) / 3) + 8
-      : Math.floor((props.date.time - 9) / 3);
+
   let humidity = "???";
   let wind = "???";
   let weather = "???";
@@ -20,6 +25,24 @@ export default function WeatherDetails(props) {
   let weatherGraph = "";
 
   if (typeof props.info != "undefined") {
+    if (props.info.date.getDay() === new Date().getDay()) {
+      date.day = dayjs(props.info.date).format("dddd");
+      date.time = Math.floor(dayjs(props.info.date).format("H") / 3) * 3;
+    } else {
+      date.day = dayjs(props.info.date).format("dddd");
+      date.time = 12;
+    }
+
+    timePeriod =
+      date.time < 9
+        ? Math.floor((date.time - 9) / 3) + 8
+        : Math.floor((date.time - 9) / 3);
+
+    timeText =
+      props.info.date.getDay() === new Date().getDay()
+        ? (date.time % 12).toString() + ":00 " + (date.time < 12 ? "AM" : "PM")
+        : "";
+
     curTemp = Math.round(
       props.info.weather.map((item) => item.main.feels_like)[timePeriod] -
         273.15
@@ -43,8 +66,7 @@ export default function WeatherDetails(props) {
         </Grid>
         <Grid item>
           <Typography variant="body2">
-            {props.date.day} {props.date.time % 12}:00{" "}
-            {props.date.time < 12 ? "AM" : "PM"}
+            {date.day} {timeText}
           </Typography>
         </Grid>
         <Grid item>
