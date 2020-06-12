@@ -58,6 +58,22 @@ export default function WeatherDetails(props) {
     icon = "none";
   }
 
+  const timeLabels = [
+    "9 AM",
+    "12 PM",
+    "3 PM",
+    "6 PM",
+    "9 PM",
+    "12AM",
+    "3 AM",
+  ].map((time, index) => (
+    <Grid key={index} xs item>
+      <Typography key={index} variant="body2">
+        {time}
+      </Typography>
+    </Grid>
+  ));
+
   return (
     <Grid container direction="column" spacing={2}>
       <Grid item container direction="column">
@@ -122,27 +138,7 @@ export default function WeatherDetails(props) {
         <Grid item>{weatherGraph}</Grid>
 
         <Grid className={classes.grayCenterText} container item direction="row">
-          <Grid xs item>
-            <Typography variant="body2">9 AM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">12 PM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">3 PM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">6 PM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">9 PM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">12 AM</Typography>
-          </Grid>
-          <Grid xs item>
-            <Typography variant="body2">3 AM</Typography>
-          </Grid>
+          {timeLabels}
         </Grid>
       </Grid>
     </Grid>

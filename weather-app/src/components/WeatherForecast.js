@@ -5,7 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import Geocode from "react-geocode";
+// import Geocode from "react-geocode";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function WeatherForecast() {
+export default function WeatherForecast(props) {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
 
@@ -56,33 +56,39 @@ export default function WeatherForecast() {
     });
   };
   const getWeatherAndLocation = async (position) => {
-    Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-    Geocode.setLanguage("en");
-    Geocode.setRegion("kr");
+    // Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+    // Geocode.setLanguage("en");
+    // Geocode.setRegion("kr");
+    // Geocode.fromLatLng(
+    //   position.coords.latitude,
+    //   position.coords.longitude
+    // ).then(
+    //   async (response) => {
+    //     setAddr(
+    //       response.results[0].address_components[1].short_name +
+    //         ", " +
+    //         response.results[0].address_components[2].short_name +
+    //         ", " +
+    //         response.results[0].address_components[3].short_name
+    //     );
+    //     const api_call = await fetch(
+    //       `https://api.openweathermap.org/data/2.5/forecast?q=${response.results[0].address_components[3].short_name}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
+    //     );
+    //     const data = await api_call.json();
+    //     setForecast(data);
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
 
-    Geocode.fromLatLng(
-      position.coords.latitude,
-      position.coords.longitude
-    ).then(
-      async (response) => {
-        setAddr(
-          response.results[0].address_components[1].short_name +
-            ", " +
-            response.results[0].address_components[2].short_name +
-            ", " +
-            response.results[0].address_components[3].short_name
-        );
+    setAddr(props.position.name);
 
-        const api_call = await fetch(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${response.results[0].address_components[3].short_name}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
-        );
-        const data = await api_call.json();
-        setForecast(data);
-      },
-      (error) => {
-        console.error(error);
-      }
+    const api_call = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${props.position.lat}&lon=${props.position.lon}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
     );
+    const data = await api_call.json();
+    setForecast(data);
   };
 
   useEffect(() => {
@@ -109,15 +115,18 @@ export default function WeatherForecast() {
     }
   }
 
-  let id = 0;
-  let dayCardComponents = dayCards.map((dayCard) => (
-    <WeatherCard info={dayCard} id={id} classes={classes} key={id++} />
+  let dayCardComponents = dayCards.map((dayCard, index) => (
+    <WeatherCard key={index} id={index} info={dayCard} classes={classes} />
   ));
 
-  id = 0;
-  let dailyDetails = dayCards.map((dayCard) => (
-    <Route path={`/${id++}`} key={id}>
-      <WeatherDetails addr={addr} info={dayCard} classes={classes} key={id} />
+  let dailyDetails = dayCards.map((dayCard, index) => (
+    <Route key={index} path={`/${index}`}>
+      <WeatherDetails
+        addr={addr}
+        info={dayCard}
+        classes={classes}
+        key={index}
+      />
     </Route>
   ));
 

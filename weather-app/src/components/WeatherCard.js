@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 // MUI
 import Box from "@material-ui/core/Box";
 import MenuItem from "@material-ui/core/MenuItem";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";

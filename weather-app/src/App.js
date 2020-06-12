@@ -1,7 +1,7 @@
 import React from "react";
 // Custom components
-import WeatherForecast from "./components/WeatherForecast";
+import Weather from "./components/Weather";
 
 export default function App() {
-  return <WeatherForecast />;
+  return <Weather />;
 }
