@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 // import Geocode from "react-geocode";
 // Custom components
 import WeatherCard from "./WeatherCard";
@@ -49,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
 export default function WeatherForecast(props) {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
+  const [selectedDay, setSelectedDay] = useState(0);
+
+  const selectDay = useCallback((num) => {
+    setSelectedDay(num);
+  }, []);
 
   const getPosition = () => {
     return new Promise(function (resolve, reject) {
@@ -116,41 +115,33 @@ export default function WeatherForecast(props) {
   }
 
   let dayCardComponents = dayCards.map((dayCard, index) => (
-    <WeatherCard key={index} id={index} info={dayCard} classes={classes} />
-  ));
-
-  let dailyDetails = dayCards.map((dayCard, index) => (
-    <Route key={index} path={`/${index}`}>
-      <WeatherDetails
-        addr={addr}
-        info={dayCard}
-        classes={classes}
-        key={index}
-      />
-    </Route>
+    <WeatherCard
+      key={index}
+      id={index}
+      info={dayCard}
+      classes={classes}
+      selectFunc={selectDay}
+      selected={selectedDay}
+    />
   ));
 
   return (
-    <Router>
-      <Card className={classes.forecastStyle}>
-        <Grid
-          container
-          justify="space-between"
-          direction="column"
-          style={{ width: "100%", height: "100%" }}
-        >
-          <Switch>
-            <Route exact path="/">
-              <Redirect to="/0" />
-            </Route>
-            {dailyDetails}
-          </Switch>
-
-          <Grid item container direction="row" justify="center">
-            {dayCardComponents}
-          </Grid>
+    <Card className={classes.forecastStyle}>
+      <Grid
+        container
+        justify="space-between"
+        direction="column"
+        style={{ width: "100%", height: "100%" }}
+      >
+        <WeatherDetails
+          addr={addr}
+          info={dayCards[selectedDay]}
+          classes={classes}
+        />
+        <Grid item container direction="row" justify="center">
+          {dayCardComponents}
         </Grid>
-      </Card>
-    </Router>
+      </Grid>
+    </Card>
   );
 }

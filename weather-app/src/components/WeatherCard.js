@@ -1,6 +1,5 @@
 import React from "react";
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
 // MUI
 import Box from "@material-ui/core/Box";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -45,7 +44,11 @@ export default function WeatherCard(props) {
   const icon = mode(weather.map((item) => item.weather[0].icon));
 
   return (
-    <MenuItem style={{ padding: "0" }} component={Link} to={`/${props.id}`}>
+    <MenuItem
+      style={{ padding: "0" }}
+      onClick={() => props.selectFunc(props.id)}
+      selected={props.selected === props.id}
+    >
       <Box className={classes.weatherCard}>
         <CardHeader
           classes={{
