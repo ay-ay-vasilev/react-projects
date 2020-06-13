@@ -38,14 +38,15 @@ export default function WeatherDetails(props) {
         ? Math.floor((date.time - 9) / 3) + 8
         : Math.floor((date.time - 9) / 3);
 
+    console.log(props.addr, date.time, timePeriod);
+
     timeText =
       props.info.date.getDay() === new Date().getDay()
         ? (date.time % 12).toString() + ":00 " + (date.time < 12 ? "AM" : "PM")
         : "";
 
     curTemp = Math.round(
-      props.info.weather.map((item) => item.main.feels_like)[timePeriod] -
-        273.15
+      props.info.weather.map((item) => item.main.temp)[0] - 273.15
     );
     weather = icon = props.info.weather.map((item) => item.weather[0].main)[
       timePeriod

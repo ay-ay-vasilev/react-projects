@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-// import Geocode from "react-geocode";
 // Custom components
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
@@ -43,44 +42,10 @@ const useStyles = makeStyles((theme) => ({
 export default function WeatherForecast(props) {
   const [addr, setAddr] = useState("");
   const [forecast, setForecast] = useState("");
+
   const [selectedDay, setSelectedDay] = useState(0);
 
-  const selectDay = useCallback((num) => {
-    setSelectedDay(num);
-  }, []);
-
-  const getPosition = () => {
-    return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-  };
-  const getWeatherAndLocation = async (position) => {
-    // Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
-    // Geocode.setLanguage("en");
-    // Geocode.setRegion("kr");
-    // Geocode.fromLatLng(
-    //   position.coords.latitude,
-    //   position.coords.longitude
-    // ).then(
-    //   async (response) => {
-    //     setAddr(
-    //       response.results[0].address_components[1].short_name +
-    //         ", " +
-    //         response.results[0].address_components[2].short_name +
-    //         ", " +
-    //         response.results[0].address_components[3].short_name
-    //     );
-    //     const api_call = await fetch(
-    //       `https://api.openweathermap.org/data/2.5/forecast?q=${response.results[0].address_components[3].short_name}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
-    //     );
-    //     const data = await api_call.json();
-    //     setForecast(data);
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
-
+  const getWeatherAndLocation = async () => {
     setAddr(props.position.name);
 
     const api_call = await fetch(
@@ -88,12 +53,15 @@ export default function WeatherForecast(props) {
     );
     const data = await api_call.json();
     setForecast(data);
+    console.log(data);
   };
 
   useEffect(() => {
-    getPosition().then((position) => {
-      getWeatherAndLocation(position);
-    });
+    getWeatherAndLocation();
+  }, []);
+
+  const selectDay = useCallback((num) => {
+    setSelectedDay(num);
   }, []);
 
   const classes = useStyles();
