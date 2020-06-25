@@ -53,7 +53,6 @@ export default function WeatherForecast(props) {
     );
     const data = await api_call.json();
     setForecast(data);
-    console.log(data);
   };
 
   useEffect(() => {

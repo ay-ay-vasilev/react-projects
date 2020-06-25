@@ -24,50 +24,40 @@ export default function WeatherDetails(props) {
   let curTemp = "?";
   let weatherGraph = "";
 
+  let timeLabels = ["9 AM", "12 PM", "3 PM", "6 PM", "9 PM", "12 AM", "3 AM"];
+
   if (typeof props.info != "undefined") {
-    if (props.info.date.getDay() === new Date().getDay()) {
-      date.day = dayjs(props.info.date).format("dddd");
-      date.time = Math.floor(dayjs(props.info.date).format("H") / 3) * 3;
-    } else {
-      date.day = dayjs(props.info.date).format("dddd");
-      date.time = 12;
-    }
+    date.day = dayjs(props.info.date).format("dddd");
+    date.time = Math.floor(dayjs(props.info.date).format("H") / 3) * 3;
 
     timePeriod =
       date.time < 9
         ? Math.floor((date.time - 9) / 3) + 8
         : Math.floor((date.time - 9) / 3);
 
-    console.log(props.addr, date.time, timePeriod);
-
     timeText =
-      props.info.date.getDay() === new Date().getDay()
-        ? (date.time % 12).toString() + ":00 " + (date.time < 12 ? "AM" : "PM")
-        : "";
+      (date.time % 12).toString() + ":00 " + (date.time < 12 ? "AM" : "PM");
 
     curTemp = Math.round(
       props.info.weather.map((item) => item.main.temp)[0] - 273.15
     );
-    weather = icon = props.info.weather.map((item) => item.weather[0].main)[
-      timePeriod
-    ];
-    icon = props.info.weather.map((item) => item.weather[0].icon)[timePeriod];
-    humidity = props.info.weather.map((item) => item.main.humidity)[timePeriod];
-    wind = props.info.weather.map((item) => item.wind.speed)[timePeriod];
+    weather = icon = props.info.weather.map((item) => item.weather[0].main)[0];
+    icon = props.info.weather.map((item) => item.weather[0].icon)[0];
+    humidity = props.info.weather.map((item) => item.main.humidity)[0];
+    wind = props.info.weather.map((item) => item.wind.speed)[0];
     weatherGraph = <WeatherGraph info={props.info} />;
+
+    while (
+      timeLabels[0] !==
+      (date.time % 12).toString() + " " + (date.time < 12 ? "AM" : "PM")
+    ) {
+      timeLabels.unshift(timeLabels.pop());
+    }
   } else {
     icon = "none";
   }
 
-  const timeLabels = [
-    "9 AM",
-    "12 PM",
-    "3 PM",
-    "6 PM",
-    "9 PM",
-    "12AM",
-    "3 AM",
-  ].map((time, index) => (
+  timeLabels = timeLabels.map((time, index) => (
     <Grid key={index} xs item>
       <Typography key={index} variant="body2">
         {time}
