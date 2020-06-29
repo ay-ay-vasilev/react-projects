@@ -12,7 +12,6 @@ export default function WeatherDetails(props) {
     time: "???",
   };
 
-  let timePeriod;
   let timeText;
 
   const classes = props.classes;
@@ -29,11 +28,6 @@ export default function WeatherDetails(props) {
   if (typeof props.info != "undefined") {
     date.day = dayjs(props.info.date).format("dddd");
     date.time = Math.floor(dayjs(props.info.date).format("H") / 3) * 3;
-
-    timePeriod =
-      date.time < 9
-        ? Math.floor((date.time - 9) / 3) + 8
-        : Math.floor((date.time - 9) / 3);
 
     timeText =
       (date.time % 12).toString() + ":00 " + (date.time < 12 ? "AM" : "PM");

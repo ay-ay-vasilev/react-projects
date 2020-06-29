@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
 // MUI
-import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -93,22 +92,20 @@ export default function WeatherForecast(props) {
   ));
 
   return (
-    <Card className={classes.forecastStyle}>
-      <Grid
-        container
-        justify="space-between"
-        direction="column"
-        style={{ width: "100%", height: "100%" }}
-      >
-        <WeatherDetails
-          addr={addr}
-          info={dayCards[selectedDay]}
-          classes={classes}
-        />
-        <Grid item container direction="row" justify="center">
-          {dayCardComponents}
-        </Grid>
+    <Grid
+      container
+      justify="space-between"
+      direction="column"
+      style={{ width: "100%", height: "100%" }}
+    >
+      <WeatherDetails
+        addr={addr}
+        info={dayCards[selectedDay]}
+        classes={classes}
+      />
+      <Grid item container direction="row" justify="center">
+        {dayCardComponents}
       </Grid>
-    </Card>
+    </Grid>
   );
 }
