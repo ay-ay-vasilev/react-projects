@@ -47,9 +47,20 @@ export default function WeatherDetails(props) {
     wind = props.info.weather.map((item) => item.wind.speed)[0];
     weatherGraph = <WeatherGraph info={props.info} />;
 
+    console.log("HEY");
+
+    console.log(
+      (date.time % 12).toString() + " " + (date.time < 12 ? "AM" : "PM") ===
+        "0 PM" && timeLabels[1] === "12 PM"
+    );
+
     while (
       timeLabels[0] !==
-      (date.time % 12).toString() + " " + (date.time < 12 ? "AM" : "PM")
+        (date.time % 12).toString() + " " + (date.time < 12 ? "AM" : "PM") &&
+      !(
+        (date.time % 12).toString() + " " + (date.time < 12 ? "AM" : "PM") ===
+          "0 PM" && timeLabels[0] === "12 PM"
+      )
     ) {
       timeLabels.unshift(timeLabels.pop());
     }
