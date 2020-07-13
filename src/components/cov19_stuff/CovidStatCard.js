@@ -21,8 +21,6 @@ export default function CovidStatCard(props) {
     getCovidCityStats();
   }, []);
 
-  console.log(stats);
-
   return (
     <Grid container direction="column" spacing={3}>
       <Grid item style={{ alignSelf: "center" }}>

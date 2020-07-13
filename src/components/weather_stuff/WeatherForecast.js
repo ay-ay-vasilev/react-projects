@@ -4,39 +4,6 @@ import WeatherCard from "./WeatherCard";
 import WeatherDetails from "./WeatherDetails";
 // MUI
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme) => ({
-  forecastStyle: {
-    margin: "auto",
-    width: theme.spacing(14) * 5,
-    padding: theme.spacing(2),
-    spacing: theme.spacing(2),
-  },
-  weatherCard: {
-    width: theme.spacing(14),
-    height: theme.spacing(20),
-  },
-  weatherIcon: {
-    height: theme.spacing(6),
-    width: theme.spacing(6),
-    alignSelf: "center",
-    justify: "center",
-  },
-  weatherIconBig: {
-    height: theme.spacing(8),
-    width: theme.spacing(8),
-    alignSelf: "center",
-    justify: "center",
-  },
-  grayCenterText: {
-    textAlign: "center",
-    color: "#aaaaaa",
-  },
-  grayText: {
-    color: "#aaaaaa",
-  },
-}));
 
 export default function WeatherForecast(props) {
   const [addr, setAddr] = useState("");
@@ -62,7 +29,6 @@ export default function WeatherForecast(props) {
     setSelectedDay(num);
   }, []);
 
-  const classes = useStyles();
   const today = new Date();
 
   let dayCards = [];
@@ -85,7 +51,7 @@ export default function WeatherForecast(props) {
       key={index}
       id={index}
       info={dayCard}
-      classes={classes}
+      classes={props.classes}
       selectFunc={selectDay}
       selected={selectedDay}
     />
@@ -101,7 +67,7 @@ export default function WeatherForecast(props) {
       <WeatherDetails
         addr={addr}
         info={dayCards[selectedDay]}
-        classes={classes}
+        classes={props.classes}
       />
       <Grid item container direction="row" justify="center">
         {dayCardComponents}
