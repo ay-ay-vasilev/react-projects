@@ -3,13 +3,12 @@ import React from "react";
 import AppBar from "@material-ui/core/AppBar"
 import Container from "@material-ui/core/Container"
 import Typography from "@material-ui/core/Typography"
-import Grid from "@material-ui/core/Grid"
 // Custom components
 import Info from "./components/Info";
-import Test from "./components/Test";
 
 export default function App() {
   return <React.Fragment>
+    <div style={{backgroundColor: "#fafafa"}}>
     <AppBar style={{margin: 'auto', height: 80, backgroundColor: '#EC6E4C', justifyContent: "center", alignItems: "center"}}>
         <Typography variant="h6">
           COVID statistics
@@ -18,5 +17,6 @@ export default function App() {
     <Container style={{marginTop: 80, padding: 25}}>
     <Info/>
     </Container>
+    </div>
     </React.Fragment>;
 }
