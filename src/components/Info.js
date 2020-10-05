@@ -10,9 +10,6 @@ import styles from "../styles/styles"
 export default function Info() {
   const classes = styles();
 
-  console.log(classes)
-  console.log(styles())
-
   const cities = [
     {
       lat: 62.03,
@@ -41,8 +38,8 @@ export default function Info() {
   //     area: "Moscow",
   //   };
 
-  const infoCards = cities.map((city) => (
-    <Grid item className={classes.infoCardWrapper}>
+  const infoCards = cities.map((city, index) => (
+    <Grid item key={index} className={classes.infoCardWrapper}>
       <InfoCard location={city} classes={classes} />{" "}
     </Grid>
   ));

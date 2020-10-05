@@ -7,8 +7,8 @@ import { LinePath, AreaClosed } from "@vx/shape";
 import { curveMonotoneX } from "@vx/curve";
 
 export default function WeatherGraph(props) {
-  const data = props.info.weather.map((item) => ({
-    timeOfDay: parseInt(item.dt_txt.slice(11, 13)),
+  const data = props.info.weather.map((item, index) => ({
+    order: index,
     temp: Math.round(item.main.feels_like - 273.15),
   }));
 
@@ -24,14 +24,8 @@ export default function WeatherGraph(props) {
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
   const x = (d) =>
-    d.timeOfDay < 9
-      ? new Date(tomorrow.setHours(d.timeOfDay))
-      : new Date(today.setHours(d.timeOfDay));
+    d.order;
 
   const y = (d) =>
     d.temp -

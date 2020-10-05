@@ -19,7 +19,7 @@ export default function CovidStatCard(props) {
 
   useEffect(() => {
     getCovidCityStats();
-  }, []);
+  });
 
   return (
     <Grid container direction="column" spacing={3}>
